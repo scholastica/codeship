@@ -1,15 +1,18 @@
-# Codeship
+# Codeship dinghy
+
+<img src="/assets/boat.png" />
 
 
-This is a minimalistic gem that handles authenticating againsts Codeship's API (v2).
+This is a minimalistic gem that handles authentication with Codeship's API (v2).
 
-Codeship requires you to uses basic-auth to acquire a short lived token. 
+Codeship's API uses tokens, but to get a token, you need to make a basic-auth request. Since the tokens are only
+valid for one hour, this gem manages aims to manage the token for you.  You only need to call one method `Codeship.token` and if it's still valid we'll reuse the existing token. If the token has expired, we'll re-authenticate and get a new token.
 
 
 ### Features
 
-* No dependencies!
-* Future proof
+* No dependencies! 100% standard lib
+* Future proof. Most api clients try to wrap endpoints for you.
 
 
 ## Installation
@@ -28,22 +31,28 @@ And then execute:
 
 ## Configuration
 
+This is for the basic-auth request. Codeship recommends creating an API client user. https://apidocs.codeship.com/v2/authentication/access-and-permissions
+
+```ruby
 Codeship.configure do |config|
   config.username = YOUR_USERNAME
   config.password = YOUR_PASSWORD
 end
-
+```
 
 ## Example
 
-First, Make a request w/ the HTTP client of your choice (here using RestClient)
+First, make a request w/ the HTTP client of your choice (here using RestClient)
 
-    resp = RestClient.get "https://api.codeship.com/v2/organizations/7fec57e0-e93e-0133-b53e-76bef8d7b14f/projects", {Authorization: "Bearer #{Codeship.token}"}
+```ruby
+resp = RestClient.get "https://api.codeship.com/v2/organizations/7fec57e0-e93e-0133-b53e-76bef8d7b14f/projects", {Authorization: "Bearer #{Codeship.token}"}
+```
 
 Then, parse the respons
 
-    projects = JSON(resp.body)
-
+```ruby
+JSON(resp.body)
+```
 
 
 ## Development
