@@ -6,13 +6,14 @@
 This is a minimalistic gem that handles authentication with Codeship's API (v2).
 
 Codeship's API uses tokens, but to get a token, you need to make a basic-auth request. Since the tokens are only
-valid for one hour, this gem manages aims to manage the token for you.  You only need to call one method `Codeship.token` and if it's still valid we'll reuse the existing token. If the token has expired, we'll re-authenticate and get a new token.
+valid for one hour, this gem manages the token for you. You only need to call one method `Codeship.token` and if the token is still when you call `Codeship.token` we'll reuse it.
+If the token had already expired, we'll re-authenticate and get a new one.
 
 
 ### Features
 
 * No dependencies! 100% standard lib
-* Future proof. Most api clients try to wrap endpoints for you.
+* Future proof. Most api clients try to wrap endpoints for you. We're not doing that here.
 
 
 ## Installation
@@ -45,7 +46,8 @@ end
 First, make a request w/ the HTTP client of your choice (here using RestClient)
 
 ```ruby
-resp = RestClient.get "https://api.codeship.com/v2/organizations/7fec57e0-e93e-0133-b53e-76bef8d7b14f/projects", {Authorization: "Bearer #{Codeship.token}"}
+token = Codeship.token
+resp = RestClient.get "https://api.codeship.com/v2/organizations/7fec57e0-e93e-0133-b53e-76bef8d7b14f/projects", {Authorization: "Bearer #{token}"}
 ```
 
 Then, parse the respons
